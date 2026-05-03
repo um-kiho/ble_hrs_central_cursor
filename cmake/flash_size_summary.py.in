@@ -1,0 +1,37 @@
+"""Post-build script: print App + SoftDevice flash size summary."""
+import os
+import subprocess
+import tempfile
+
+APP_BIN       = r"@APP_BIN@"
+SD_HEX        = r"@SD_HEX@"
+OBJCOPY       = r"@CMAKE_OBJCOPY@"
+TOTAL_FLASH_KB = @TOTAL_FLASH_KB@
+
+app_size = os.path.getsize(APP_BIN) if os.path.isfile(APP_BIN) else 0
+
+sd_size = 0
+if os.path.isfile(SD_HEX) and os.path.isfile(OBJCOPY):
+    tmp = os.path.join(tempfile.gettempdir(), "_sd_size_check.bin")
+    try:
+        subprocess.run(
+            [OBJCOPY, "--input-target=ihex", "--output-target=binary", SD_HEX, tmp],
+            capture_output=True, check=True,
+        )
+        sd_size = os.path.getsize(tmp)
+    except Exception:
+        pass
+    finally:
+        if os.path.isfile(tmp):
+            os.remove(tmp)
+
+total = app_size + sd_size
+pct = round(total / (TOTAL_FLASH_KB * 1024) * 100, 2) if TOTAL_FLASH_KB else 0
+
+print()
+print("========== Flash Size Summary ==========")
+print(f"  App (zephyr.bin)  : {app_size:>8,} B  ({round(app_size/1024,1)} KB)")
+print(f"  SoftDevice (s145) : {sd_size:>8,} B  ({round(sd_size/1024,1)} KB)")
+print(f"  ----------------------------------------")
+print(f"  Total             : {total:>8,} B  ({round(total/1024,1)} KB)  [{pct}% of {TOTAL_FLASH_KB} KB]")
+print("========================================")

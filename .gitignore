@@ -1,0 +1,14 @@
+# Build output
+build/
+
+# IDE / editor
+.cache/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary
+*.swp
+*.swo
+*~

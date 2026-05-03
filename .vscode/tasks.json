@@ -1,0 +1,270 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Debug Start Banner",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Write-Host 'Debug prep: building and flashing firmware...'"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false,
+				"focus": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Clean (Delete build folder)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"if (Test-Path '${workspaceFolder}/build') { Remove-Item -Recurse -Force '${workspaceFolder}/build'; Write-Host 'Clean complete: build folder removed.' } else { Write-Host 'Clean skipped: build folder not found.' }"
+			],
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"clear": true,
+				"focus": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Build (Terminal, Verbose)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}/.vscode/build_verbose.ps1"
+			],
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false,
+				"focus": false
+			},
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "Build + Flash (Default)",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Build (Terminal, Verbose)",
+				"Flash (J-Link Direct)"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Clean Rebuild (Configure + Verbose Build)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}/.vscode/clean_rebuild_verbose.ps1"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true,
+				"focus": false
+			},
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "West update (nrf-bm workspace)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}/.vscode/west_update_nrf_bm.ps1"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true,
+				"focus": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "J-Link GDB Server (port 2331)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}/.vscode/start_jlink_gdb_server.ps1"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true,
+				"focus": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug Prep (Build + Flash)",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Debug Start Banner",
+				"Build (Terminal, Verbose)",
+				"Flash (J-Link Direct)"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug: Stop J-Link GDB Server",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'JLinkGDBServerCL.exe' -and $_.CommandLine -match '-port\\s+2331' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }; exit 0"
+			],
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared",
+				"clear": false,
+				"focus": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "UART Monitor (COM11, 115200)",
+			"type": "shell",
+			"command": "E:/ncs/toolchains/fd21892d0f/opt/bin/python.exe",
+			"args": [
+				"-m",
+				"serial.tools.miniterm",
+				"COM11",
+				"115200"
+			],
+			"isBackground": true,
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"clear": true,
+				"focus": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "UART Monitor (COM12, 115200)",
+			"type": "shell",
+			"command": "E:/ncs/toolchains/fd21892d0f/opt/bin/python.exe",
+			"args": [
+				"-m",
+				"serial.tools.miniterm",
+				"COM12",
+				"115200"
+			],
+			"isBackground": true,
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"clear": true,
+				"focus": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Flash (J-Link Direct)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}/.vscode/flash_jlink.ps1"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true,
+				"focus": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug: GUI toolbar hint",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Write-Host ''; Write-Host '디버그 툴바는 cppdbg 세션에서만 표시됩니다.' -ForegroundColor Cyan; Write-Host '  - Ctrl+Shift+D → 초록 재생(F5) → launch.json의 J-Link GUI Debug' -ForegroundColor White; Write-Host '  - CMake 상태 표시줄의 디버그 아이콘(cmake.debugConfig)도 동일' -ForegroundColor White; Write-Host '  - 터미널 GDB(Debug Attach)는 VS Code 툴바가 나오지 않습니다.' -ForegroundColor DarkYellow; Write-Host ''"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true,
+				"focus": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug Attach (GDB CLI)",
+			"type": "shell",
+			"command": "pwsh",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}/.vscode/debug_attach_cli.ps1"
+			],
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true,
+				"focus": true
+			},
+			"problemMatcher": []
+		}
+	]
+}

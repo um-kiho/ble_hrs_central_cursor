@@ -1,0 +1,104 @@
+{
+  "cmake.generator": "Ninja",
+  "cmake.buildDirectory": "${workspaceFolder}/build",
+  "cmake.options.statusBarVisibility": "icon",
+  "cmake.defaultLaunchTarget": "zephyr/zephyr.elf",
+  "cmake.launchTargetPath": "${workspaceFolder}/build/zephyr/zephyr.elf",
+  "cmake.buildBeforeRun": true,
+  "cmake.buildTask": true,
+  "cmake.debugConfig": {
+    "name": "CMake/Launch - zephyr_final",
+    "preLaunchTask": "Flash (J-Link Direct)",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${workspaceFolder}/build/zephyr/zephyr.elf",
+    "cwd": "${workspaceFolder}",
+    "miDebuggerPath": "E:/ncs/toolchains/fd21892d0f/opt/zephyr-sdk/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb.exe",
+    "MIMode": "gdb",
+    "debugServerPath": "C:/Program Files/SEGGER/JLink_V876/JLinkGDBServerCL.exe",
+    "debugServerArgs": "-if SWD -device nRF54L15_M33 -speed 4000 -port 2331 -swoport 2332 -telnetport 2333 -nogui",
+    "serverStarted": "Listening on TCP/IP port 2331",
+    "filterStdout": true,
+    "filterStderr": true,
+    "miDebuggerServerAddress": "localhost:2331",
+    "serverLaunchTimeout": 30000,
+    "stopAtEntry": false,
+    "stopAtConnect": true,
+    "launchCompleteCommand": "None",
+    "externalConsole": false,
+    "logging": {
+      "engineLogging": true,
+      "trace": true,
+      "traceResponse": false
+    }
+  },
+  "cmake.buildArgs": [
+    "--verbose"
+  ],
+  "VsCodeTaskButtons.showCounter": false,
+  "VsCodeTaskButtons.tasks": [
+    {
+      "label": "$(debug-start) Debug",
+      "tooltip": "퀵 픽: Build+Flash 후 F5(툴바), 안내, 또는 GDB CLI(툴바 없음)",
+      "tasks": [
+        {
+          "label": "Build+Flash → then F5 (툴바)",
+          "task": "Debug Prep (Build + Flash)",
+          "description": "끝난 뒤 실행 및 디버그(F5)에서 J-Link GUI Debug 선택"
+        },
+        {
+          "label": "툴바 디버그 안내",
+          "task": "Debug: GUI toolbar hint",
+          "description": "F5 / CMake 상태 표시줄 디버그"
+        },
+        {
+          "label": "GDB CLI (터미널, 툴바 없음)",
+          "task": "Debug Attach (GDB CLI)",
+          "description": "VS Code 디버그 세션 없음"
+        }
+      ],
+      "color": "default",
+      "alignment": "left"
+    },
+    {
+      "label": "$(trash) Clean",
+      "task": "Clean (Delete build folder)",
+      "color": "warning",
+      "alignment": "left",
+      "tooltip": "Delete build folder"
+    },
+    {
+      "label": "$(sync) Clean Build",
+      "task": "Clean Rebuild (Configure + Verbose Build)",
+      "color": "default",
+      "alignment": "left",
+      "tooltip": "Delete build folder, reconfigure and rebuild"
+    }
+  ],
+  "cmake.configureSettings": {
+    "CMAKE_MAKE_PROGRAM": "E:/ncs/toolchains/fd21892d0f/opt/bin/ninja.exe",
+    "Python3_EXECUTABLE": "E:/ncs/toolchains/fd21892d0f/opt/bin/python.exe",
+    "BOARD": "bm_nrf54l15dk/nrf54l15/cpuapp/s145_softdevice",
+    "BOARD_ROOT": "E:/ncs/nrf-bm/v1.0.0/nrf-bm",
+    "ZEPHYR_EXTRA_MODULES": "E:/ncs/nrf-bm/v1.0.0/nrf-bm",
+    "ZEPHYR_TOOLCHAIN_VARIANT": "zephyr",
+    "ZEPHYR_SDK_INSTALL_DIR": "E:/ncs/toolchains/fd21892d0f/opt/zephyr-sdk"
+  },
+  "cmake.configureEnvironment": {
+    "ZEPHYR_BASE": "E:/ncs/nrf-bm/v1.0.0/zephyr",
+    "ZEPHYR_TOOLCHAIN_VARIANT": "zephyr",
+    "ZEPHYR_SDK_INSTALL_DIR": "E:/ncs/toolchains/fd21892d0f/opt/zephyr-sdk"
+  },
+  "terminal.integrated.commandsToSkipShell": [
+    "workbench.action.debug.start",
+    "workbench.action.debug.run",
+    "workbench.action.debug.continue",
+    "workbench.action.debug.selectandstart",
+    "workbench.action.tasks.runTask"
+  ],
+  "terminal.integrated.sendKeybindingsToShell": false,
+  "debug.onTaskErrors": "debugAnyway",
+  "debug.toolBarLocation": "docked",
+  "debug.openDebug": "openOnSessionStart",
+  "debug.internalConsoleOptions": "openOnSessionStart"
+}
