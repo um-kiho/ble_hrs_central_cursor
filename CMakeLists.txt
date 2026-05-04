@@ -6,6 +6,9 @@
 
 cmake_minimum_required(VERSION 3.20.0)
 
+# snippets.cmake runs before zephyr/ exists; snippets.py mkdir() lacks parents=True (WinError 3).
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/zephyr")
+
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(ble_hrs_central)
 
